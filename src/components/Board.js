@@ -1,6 +1,6 @@
 import React from 'react';
 import Square from './Square';
-import './App.css';
+import '../App.css';
 
 class Board extends React.Component {
 
@@ -18,7 +18,9 @@ class Board extends React.Component {
             <Square
                 key={i}
                 value={squares[i].value}
+                block = {squares[i].block}
                 isInitValue={squares[i].isInitValue}
+                remainsMove = {squares[i].remainsMove}
                 square={i}
                 error={squares[i].error}
                 onChange={(e, k) => this.props.onChange(e, k)}

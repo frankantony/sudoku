@@ -1,10 +1,12 @@
 import React from 'react';
 import './App.css';
-import Board from './Board';
+import Board from './components/Board';
+import Timer from './timer/Timer';
+
 import {
   generateInitialBoard, checkConflictsLine,
-  checkConflictsColumn, checkConflictsBlock
-} from './Util.js';
+  checkConflictsColumn, checkConflictsBlock, updateAtribute
+} from './utils/Util.js';
 
 const initialBoard = '016002400320009000040103000005000069009050300630000800000306010000400072004900680';
 
@@ -13,7 +15,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      squares: Array(81).fill(0),
+      squares: Array(81).fill(''),
       loading: true,
       remainingMoves: 0,
     }
@@ -24,6 +26,7 @@ class App extends React.Component {
 
     const squares = generateInitialBoard(initialBoard);
     let initials = 0;
+
     //Calculate the amount of initials squares.
     for (let i = 0; i < squares.length; i++) {
       if (squares[i].isInitValue)
@@ -47,7 +50,7 @@ class App extends React.Component {
     const history = this.state.history.slice();
     const currentsquares = history.slice(history.length - 1);
 
-    if (isNaN(inputValue)) {
+    if (isNaN(inputValue) || inputValue === '0') {
       e.target.value = "";
       return null;
     }
@@ -55,15 +58,20 @@ class App extends React.Component {
       e.target.value = inputValue.charAt(inputValue.length - 1);
     }
 
-    // Check if the new input is not repeated in the board.
     currentsquares[0].squares[i].value = e.target.value;
-    if (!checkConflictsLine(currentsquares[0].squares, currentsquares[0].squares[i])) {
+
+    // Check if the new input is not repeated in the board.
+    let lineConflict = checkConflictsLine(currentsquares[0].squares, currentsquares[0].squares[i]);
+    let columnConflict = checkConflictsColumn(currentsquares[0].squares, currentsquares[0].squares[i]);
+    let blockConflict = checkConflictsBlock(currentsquares[0].squares, currentsquares[0].squares[i])
+
+    if (lineConflict !== -1) {
       errorMessage = true;
     }
-    if (!checkConflictsColumn(currentsquares[0].squares, currentsquares[0].squares[i])) {
+    if (columnConflict !== -1) {
       errorMessage = true;
     }
-    if (!checkConflictsBlock(currentsquares[0].squares, currentsquares[0].squares[i])) {
+    if (blockConflict !== -1) {
       errorMessage = true;
     }
 
@@ -76,6 +84,22 @@ class App extends React.Component {
       errorMessage = false;
     }
     currentsquares[0].squares[i].error = errorMessage;
+
+    if (errorMessage) {
+      updateAtribute(currentsquares[0].squares, i, true);
+
+      if (lineConflict !== -1)
+        currentsquares[0].squares[lineConflict].error = errorMessage;
+      if (columnConflict !== -1)
+        currentsquares[0].squares[columnConflict].error = errorMessage;
+      if (blockConflict !== -1)
+        currentsquares[0].squares[blockConflict].error = errorMessage;
+    }
+    else {
+      updateAtribute(currentsquares[0].squares, -1, false);
+      for (let k = 0; k < currentsquares[0].squares.length; k++)
+        currentsquares[0].squares[k].error = false;
+    }
 
     this.setState({
       history: history.concat({ squares: currentsquares[0].squares }),
@@ -92,10 +116,9 @@ class App extends React.Component {
         <div className="game-info">
           <div>{(remainingMoves === 0) ?
             "You Won!!!" :
-            ""
+            <ol>Remains  {remainingMoves} steps for to conclude the game!</ol>
           }
           </div>
-          <ol>Remains  {remainingMoves} steps for to conclude the game!</ol>
         </div>
 
         <div className="game">
@@ -108,6 +131,9 @@ class App extends React.Component {
               />)
             }
           </div>
+        </div>
+        <div className="game-info">
+          <Timer />
         </div>
       </div>
     );

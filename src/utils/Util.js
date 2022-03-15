@@ -1,3 +1,11 @@
+export function updateAtribute(squares, index, bool) {
+    for (let k = 0; k < squares.length; k++) {
+        if (k !== index)
+            squares[k].block = bool;
+    }
+}
+
+
 export function generateInitialBoard(initialBoard) {
 
     const squares = [];
@@ -8,7 +16,8 @@ export function generateInitialBoard(initialBoard) {
             let square = {
                 x: i,
                 y: j,
-                value: value,
+                block: isInitValue,
+                value: isInitValue ? value : ' ',
                 isInitValue: isInitValue,
                 error: false,
             };
@@ -27,10 +36,10 @@ export function checkConflictsLine(squares, square) {
         //Checks is not the same square and checks the value
         let objSquare = squares[line * 9 + i];
         if (objSquare.y !== square.y && objSquare.value === square.value) {
-            return false;
+            return line * 9 + i;
         }
     }
-    return true;
+    return -1;
 }
 
 //Checks if the square value no generate conflict in column
@@ -41,10 +50,10 @@ export function checkConflictsColumn(squares, square) {
         let objSquare = squares[i * 9 + square.y];
         //Checks if is not the same square and checks checks if have any square with same value.
         if (objSquare.x !== square.x && objSquare.value === square.value) {
-            return false;
+            return i * 9 + square.y;
         }
     }
-    return true;
+    return -1;
 }
 
 //Checks if the square value no generate conflict in corresponding block.
@@ -58,8 +67,18 @@ export function checkConflictsBlock(squares, square) {
             //Checks if is not the same square and checks if have any square in corresponding
             // block with same value.
             if (objSquare.x !== square.x && objSquare.y !== square.y && objSquare.value === square.value)
-                return false;
+                return i * 9 + j;
         }
     }
-    return true;
+    return -1;
+}
+
+export const formateTimer = (timer) => {
+    const getSeconds = `0${(timer % 60)}`.slice(-2)
+    const minutes = `${Math.floor(timer / 60)}`
+    const getMinutes = `0${minutes % 60}`.slice(-2)
+    const getHours = `0${Math.floor(timer / 3600)}`.slice(-2)
+
+    return `${getHours} : ${getMinutes} : ${getSeconds}`
+
 }
