@@ -1,7 +1,7 @@
 export function updateAtribute(squares, index, bool) {
     for (let k = 0; k < squares.length; k++) {
         if (k !== index)
-            squares[k].block = bool;
+            squares[k].blocked = bool;
     }
 }
 
@@ -16,8 +16,8 @@ export function generateInitialBoard(initialBoard) {
             let square = {
                 x: i,
                 y: j,
-                block: isInitValue,
-                value: isInitValue ? value : ' ',
+                blocked: isInitValue,
+                value: isInitValue ? value : '',
                 isInitValue: isInitValue,
                 error: false,
             };

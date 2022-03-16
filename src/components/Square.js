@@ -3,7 +3,7 @@ import React from 'react';
 function Square(props) {
 
   const styles = props.error ? "square square-error" : "square square-editable";
-  return props.isInitValue || props.block || props.remainsMove === 0 ? (
+  return props.isInitValue || props.blocked || props.paused ? (
     <input
       readOnly
       className={styles}

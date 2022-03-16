@@ -1,6 +1,6 @@
 import React from 'react';
 import Square from './Square';
-import '../App.css';
+import '../game/Game.css';
 
 class Board extends React.Component {
 
@@ -14,11 +14,13 @@ class Board extends React.Component {
 
     renderSquare(i) {
         const squares = this.state.squares;
+        const paused = this.props.paused;
         return (
             <Square
                 key={i}
                 value={squares[i].value}
-                block = {squares[i].block}
+                blocked = {squares[i].blocked}
+                paused = {paused}
                 isInitValue={squares[i].isInitValue}
                 remainsMove = {squares[i].remainsMove}
                 square={i}
