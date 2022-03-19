@@ -4,10 +4,8 @@ import Board from '../components/Board';
 
 import {
   generateInitialBoard, checkConflictsLine,
-  checkConflictsColumn, checkConflictsBlock, updateAtribute
+  checkConflictsColumn, checkConflictsBlock, updateAtribute, difficultyClick
 } from '../utils/Util.js';
-
-const initialBoard = '016002400320009000040103000005000069009050300630000800000306010000400072004900680';
 
 class Game extends React.Component {
 
@@ -22,7 +20,10 @@ class Game extends React.Component {
 
   //Initialize the board.
   componentDidMount() {
-
+    console.log('initialing...');
+    const level = this.props.level;
+    const initialBoard = difficultyClick(level);
+    
     const squares = generateInitialBoard(initialBoard);
 
     let initials = 0;

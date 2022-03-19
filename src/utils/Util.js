@@ -1,10 +1,36 @@
+import { easy, medium, hard } from './Level.js';
+
+export function  generateRandomInteger(max) {
+    return Math.floor(Math.random() * max) + 1;
+}
+
+export function difficultyClick(difficulty) {
+    console.log('dificuldade: ' + difficulty);
+    let initialBoard;
+    switch (difficulty) {
+        case 'easy':
+            initialBoard = easy;
+            break;
+        case 'medium':
+            initialBoard = medium;
+            break;
+        case 'hard':
+            initialBoard = hard;
+            break;
+        default:
+            console.log('other options');
+    }
+    let index = generateRandomInteger(initialBoard.length - 1);
+    
+    return initialBoard[index];
+}
+
 export function updateAtribute(squares, index, bool) {
     for (let k = 0; k < squares.length; k++) {
         if (k !== index)
             squares[k].blocked = bool;
     }
 }
-
 
 export function generateInitialBoard(initialBoard) {
 

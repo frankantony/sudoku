@@ -1,3 +1,5 @@
+import { Link, useParams } from "react-router-dom";
+
 import React, { useEffect, useRef, useState } from "react";
 import { formateTimer } from './utils/Util.js';
 import './App.css';
@@ -9,9 +11,14 @@ export const App = () => {
     const [paused, setPaused] = useState(false);
     const countRef = useRef(null);
 
+    const level = useParams().level;
+
     useEffect(() => {
-        handleResume();
-    }, [])
+        let isSubscribed = true;
+        if (isSubscribed)
+            handleResume();
+        return () => (isSubscribed = false)
+    }, []);
 
     function handleResume() {
         setPaused(false)
@@ -27,7 +34,7 @@ export const App = () => {
 
     return (
         <div>
-            <Game paused={paused} />
+            <Game paused={paused} level={level} />
             <div className="app">
                 <h3>Time</h3>
                 <div className='stopwatch-card'>
@@ -40,6 +47,7 @@ export const App = () => {
                     </div>
                 </div>
             </div>
+            <Link to="/">Back</Link>
         </div>
     );
 }
