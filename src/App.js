@@ -47,7 +47,10 @@ export const App = () => {
                     </div>
                 </div>
             </div>
-            <Link to="/">Back</Link>
+			<br/>
+			<div className = "App">
+	            <Link to="/">Back</Link>
+			</div>
         </div>
     );
 }
